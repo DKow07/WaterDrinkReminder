@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterdrinkreminder.R
-import com.example.waterdrinkreminder.model.HistoryData
-import kotlinx.android.synthetic.main.fragment_main.view.*
+import com.example.waterdrinkreminder.db.HistoricalDataEntity
+import com.example.waterdrinkreminder.model.HistoricalData
 import kotlinx.android.synthetic.main.history_item.view.*
 
-class HistoryAdapter(val items: ArrayList<HistoryData>, val context: Context) : RecyclerView.Adapter<HistoryViewHolder>() {
+class HistoryAdapter(val items: ArrayList<HistoricalDataEntity>, val context: Context) : RecyclerView.Adapter<HistoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.history_item, parent, false))
@@ -24,6 +24,12 @@ class HistoryAdapter(val items: ArrayList<HistoryData>, val context: Context) : 
         holder.date?.text = items[position].date
         holder.percentageVolume?.text = items[position].percentageVolume.toString() + "%"
         holder.volume?.text = items[position].volume
+    }
+
+    fun updateData(data: ArrayList<HistoricalDataEntity>) {
+        items.clear()
+        items.addAll(data)
+        notifyDataSetChanged()
     }
 }
 

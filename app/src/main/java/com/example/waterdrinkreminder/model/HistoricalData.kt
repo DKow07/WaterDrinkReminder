@@ -1,6 +1,6 @@
 package com.example.waterdrinkreminder.model
 
-class HistoryData (
+data class HistoricalData (
     var date: String,
     var percentageVolume: Int,
     var volume: String
