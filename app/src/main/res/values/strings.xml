@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WaterDrinkReminder</string>
+    <string name="drop_text">Drop</string>
+    <string name="open_add_water_dialog_text">OpenAddWaterDialog</string>
 </resources>

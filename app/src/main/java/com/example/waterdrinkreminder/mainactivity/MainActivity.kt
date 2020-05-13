@@ -1,9 +1,10 @@
-package com.example.waterdrinkreminder
+package com.example.waterdrinkreminder.mainactivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.example.waterdrinkreminder.MainFragment.MainFragment
+import com.example.waterdrinkreminder.mainfragment.MainFragment
+import com.example.waterdrinkreminder.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,10 +19,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchFragment(fragment: Fragment) {
-        if(fragment != null) {
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
-            transaction.commit()
-        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
     }
 }

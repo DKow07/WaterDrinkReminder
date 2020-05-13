@@ -1,4 +1,4 @@
-package com.example.waterdrinkreminder.MainFragment
+package com.example.waterdrinkreminder.mainfragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
