@@ -22,11 +22,11 @@ abstract class AppDatabase : RoomDatabase() {
             override fun onOpen(db: SupportSQLiteDatabase) {
                 super.onOpen(db)
                 instance.let { database -> scope.launch {
-                    var historicalDataDao = database?.HistoricalDataDao()
+                    val historicalDataDao = database?.HistoricalDataDao()
 
                     historicalDataDao?.deleteAll()
 
-                    historicalDataDao?.insert(HistoricalDataEntity(null, "11.05.2020", 10, "250ml/2500ml"))
+                    historicalDataDao?.insert(HistoricalDataEntity(null, "110.05.2020", 10, "250ml/2500ml"))
                     historicalDataDao?.insert(HistoricalDataEntity(null,"10.05.2020", 20, "1250ml/2500ml"))
                     historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 12, "750ml/2500ml"))
                     historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 5, "750ml/2500ml"))
@@ -48,7 +48,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "water-drink-reminder"
-                ).build()
+                ).addCallback(AppDataBaseCallback(scope)).build()
                 this.instance = instance
                 return instance
             }
