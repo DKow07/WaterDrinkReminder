@@ -1,12 +1,10 @@
 package com.example.waterdrinkreminder.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.waterdrinkreminder.ui.home.HomeFragment
 import com.example.waterdrinkreminder.R
-import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
+import com.example.waterdrinkreminder.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 

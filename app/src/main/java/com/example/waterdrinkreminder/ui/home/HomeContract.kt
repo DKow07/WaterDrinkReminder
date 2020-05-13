@@ -6,12 +6,12 @@ import com.example.waterdrinkreminder.db.HistoricalDataEntity
 interface HomeContract {
 
     interface View : BaseContract.BaseView {
-        fun onLoadHistoricalDataSuccess(items: ArrayList<HistoricalDataEntity>)
-
-        fun onLoadHistoricalDataError()
+        fun setCurrentDate(date: String)
     }
 
     interface Presenter : BaseContract.BasePresenter {
-        fun loadHistoricalDataFromDb()
+        //TODO: fillBasicData
+
+        fun checkCurrentDate()
     }
 }
