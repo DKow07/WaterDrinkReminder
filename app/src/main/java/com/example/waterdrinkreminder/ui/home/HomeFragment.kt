@@ -5,17 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterdrinkreminder.R
-import com.example.waterdrinkreminder.model.HistoryData
-import kotlinx.android.synthetic.main.fragment_main.*
+import com.example.waterdrinkreminder.db.HistoricalDataEntity
+import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
 
 class HomeFragment : Fragment(), HomeContract.View {
 
     private lateinit var presenter: HomePresenter
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: HistoricalDataAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,25 +27,20 @@ class HomeFragment : Fragment(), HomeContract.View {
     ): View? {
 
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
-        presenter = HomePresenter(this)
+
+        presenter = HomePresenter(this, context!!)
+        adapter = HistoricalDataAdapter()
         recyclerView = view.findViewById(R.id.historyRecyclerView)
         linearLayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = linearLayoutManager
+        recyclerView.adapter = adapter
 
-        //----------------------------test------------------------------------
-        var testItems = ArrayList<HistoryData>()
-        testItems.add(HistoryData("11.05.2020", 10, "250ml/2500ml"))
-        testItems.add(HistoryData("10.05.2020", 20, "1250ml/2500ml"))
-        testItems.add(HistoryData("9.05.2020", 40, "250ml/2500ml"))
-        testItems.add(HistoryData("8.05.2020", 75, "750ml/2500ml"))
-        testItems.add(HistoryData("7.05.2020", 75, "750ml/2500ml"))
-        testItems.add(HistoryData("6.05.2020", 75, "750ml/2500ml"))
-        testItems.add(HistoryData("5.05.2020", 75, "750ml/2500ml"))
-        testItems.add(HistoryData("4.05.2020", 75, "750ml/2500ml"))
-        var testAdapter = HistoryAdapter(testItems, context!!)
-        //----------------------------test------------------------------------
+        var viewModel = ViewModelProvider(this).get(HistoricalDataViewModel::class.java)
 
-        recyclerView.adapter = testAdapter
+        viewModel.allHistoricalData.observe(viewLifecycleOwner, Observer { data ->
+            data?.let{adapter.updateData(ArrayList(data))}
+            //checkIfEmpty
+        })
 
         return view
     }
@@ -50,5 +48,13 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun onDestroy() {
         presenter.onDestroy()
         super.onDestroy()
+    }
+
+    override fun onLoadHistoricalDataSuccess(items: ArrayList<HistoricalDataEntity>) {
+
+    }
+
+    override fun onLoadHistoricalDataError() {
+        TODO("Not yet implemented")
     }
 }
