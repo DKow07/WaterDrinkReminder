@@ -1,9 +1,9 @@
-package com.example.waterdrinkreminder.mainactivity
+package com.example.waterdrinkreminder.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.example.waterdrinkreminder.mainfragment.MainFragment
+import com.example.waterdrinkreminder.ui.home.MainFragment
 import com.example.waterdrinkreminder.R
 
 class MainActivity : AppCompatActivity() {
