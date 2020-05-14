@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,7 +18,7 @@ import com.example.waterdrinkreminder.R
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataEntity
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
 
-class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener {
+class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animation.AnimationListener {
 
     private lateinit var presenter: HomePresenter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -32,8 +33,16 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener {
     private lateinit var openAddWaterPanelButton: ImageView
     private lateinit var addWaterPanel: ConstraintLayout
     private lateinit var grayBackground: View
+    private lateinit var plusButton: ImageView
+    private lateinit var minusButton: ImageView
+    private lateinit var addWaterButton: ImageView
+    private lateinit var waterCupCounterText: TextView
 
     private var isOpenAddWaterPanel = false
+
+    private var waterCupCounter = 0
+
+    private val VOLUME = 250
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,6 +101,13 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener {
         addWaterPanel = view.findViewById(R.id.addWaterPanel)
         grayBackground = view.findViewById(R.id.grayBackground)
 
+        plusButton = view.findViewById(R.id.plusButton)
+        plusButton.setOnClickListener(this)
+        minusButton = view.findViewById(R.id.minusButton)
+        minusButton.setOnClickListener(this)
+        addWaterButton = view.findViewById(R.id.addWaterButton)
+        addWaterButton.setOnClickListener(this)
+        waterCupCounterText = view.findViewById(R.id.waterCupCounterText)
     }
 
     private fun checkIfEmptyDataList(data: List<HistoricalDataEntity>) {
@@ -106,27 +122,80 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.openAddWaterPanelButton -> {
-                onClickOpenAddWaterPanelButton()
-            }
+            R.id.openAddWaterPanelButton -> onClickOpenAddWaterPanelButton()
+            R.id.minusButton -> onClickMinusButton()
+            R.id.plusButton -> onClickPlusButton()
+            R.id.addWaterButton -> onClickAddWaterButton()
         }
     }
 
     private fun onClickOpenAddWaterPanelButton() {
         if(isOpenAddWaterPanel) {
-            isOpenAddWaterPanel = false
-            openAddWaterPanelButton.setImageResource(R.drawable.button_add_water_dialog_theme)
-            addWaterPanel.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
-            grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
-            addWaterPanel.visibility = View.INVISIBLE
-            grayBackground.visibility = View.INVISIBLE
+            closeAddWaterPanel()
         } else {
-            isOpenAddWaterPanel = true
-            openAddWaterPanelButton.setImageResource(R.drawable.close_button_add_water_dialog_theme)
-            addWaterPanel.visibility = View.VISIBLE
-            grayBackground.visibility = View.VISIBLE
-            addWaterPanel.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
-            grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
+           showAddWaterPanel()
         }
+    }
+
+    private fun closeAddWaterPanel() {
+        isOpenAddWaterPanel = false
+        openAddWaterPanelButton.setImageResource(R.drawable.button_add_water_dialog_theme)
+        var anim = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+        anim.setAnimationListener(this)
+        addWaterPanel.startAnimation(anim)
+        grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
+        addWaterPanel.visibility = View.INVISIBLE
+        grayBackground.visibility = View.INVISIBLE
+
+    }
+
+    private fun showAddWaterPanel() {
+        isOpenAddWaterPanel = true
+        openAddWaterPanelButton.setImageResource(R.drawable.close_button_add_water_dialog_theme)
+        addWaterPanel.visibility = View.VISIBLE
+        grayBackground.visibility = View.VISIBLE
+        addWaterPanel.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
+        grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
+    }
+
+    private fun onClickMinusButton() {
+        if(waterCupCounter == 0)
+            return
+
+        waterCupCounter--
+        waterCupCounterText.text = waterCupCounter.toString()
+    }
+
+    private fun onClickPlusButton() {
+        if(waterCupCounter == 100)
+            return
+
+        waterCupCounter++
+        waterCupCounterText.text = waterCupCounter.toString()
+    }
+
+    private fun onClickAddWaterButton() {
+        val volume = VOLUME * waterCupCounter
+        var remaining = PreferencesHelper.getInstance(context!!).getCurrentRemainingVolume
+        var target = PreferencesHelper.getInstance(context!!).getCurrentTargetVolume
+        remaining = remaining!! + volume
+
+        PreferencesHelper.getInstance(context!!).saveCurrentRemainingVolume(remaining)
+
+        presenter.fillBasicData()
+        closeAddWaterPanel()
+    }
+
+    override fun onAnimationRepeat(animation: Animation?) {
+        return
+    }
+
+    override fun onAnimationEnd(animation: Animation?) {
+        waterCupCounter = 0
+        waterCupCounterText.text = waterCupCounter.toString()
+    }
+
+    override fun onAnimationStart(animation: Animation?) {
+        return
     }
 }

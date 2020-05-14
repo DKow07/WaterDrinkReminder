@@ -201,7 +201,7 @@
             app:srcCompat="@drawable/add_panel" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/plusButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -210,10 +210,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView"
             app:layout_constraintVertical_bias="0.65"
-            app:srcCompat="@drawable/plus_button" />
+            app:srcCompat="@drawable/plus_button"
+            android:clickable="true"
+            android:focusable="true" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/minusButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -222,18 +224,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView"
             app:layout_constraintVertical_bias="0.65"
-            app:srcCompat="@drawable/minus_button" />
+            app:srcCompat="@drawable/minus_button"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/addWaterButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/imageView4"
-            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintEnd_toEndOf="@+id/plusButton"
+            app:layout_constraintStart_toStartOf="@+id/minusButton"
             app:layout_constraintTop_toTopOf="@+id/imageView"
             app:layout_constraintVertical_bias="0.92"
-            app:srcCompat="@drawable/add_released" />
+            app:srcCompat="@drawable/add_released"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <TextView
             android:id="@+id/textView"
@@ -244,22 +250,22 @@
             android:textColor="#000"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
-            app:layout_constraintEnd_toEndOf="@+id/imageView4"
-            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintEnd_toEndOf="@+id/plusButton"
+            app:layout_constraintStart_toStartOf="@+id/minusButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.38" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/waterCupCounterText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:text="0"
             android:textColor="#434343"
             android:textSize="64sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView6"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
+            app:layout_constraintBottom_toTopOf="@+id/addWaterButton"
+            app:layout_constraintEnd_toStartOf="@+id/plusButton"
+            app:layout_constraintStart_toEndOf="@+id/minusButton"
             app:layout_constraintTop_toBottomOf="@+id/textView"
             app:layout_constraintVertical_bias="0.3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
