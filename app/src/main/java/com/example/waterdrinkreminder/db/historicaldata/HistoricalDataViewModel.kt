@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HistoricalDataViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: HistoricalDataRepository
@@ -15,7 +17,7 @@ class HistoricalDataViewModel(application: Application) : AndroidViewModel(appli
         allHistoricalData = repository.allHistoricalData
     }
 
-    suspend fun insert(historicalDataEntity: HistoricalDataEntity) {
+    fun insert(historicalDataEntity: HistoricalDataEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(historicalDataEntity)
     }
 }

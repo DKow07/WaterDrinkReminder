@@ -23,15 +23,15 @@ abstract class AppDatabase : RoomDatabase() {
                 instance.let { database -> scope.launch {
                     val historicalDataDao = database?.HistoricalDataDao()
 
-                    historicalDataDao?.deleteAll()
+                    //historicalDataDao?.deleteAll()
 
-                    historicalDataDao?.insert(HistoricalDataEntity(null, "11.05.2020", 250, 2500))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"10.05.2020", 1250, 2500))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 750, 2500))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 750, 2500))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"6.05.2020", 750, 2500))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"5.05.2020", 1000, 2500))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"4.05.2020", 1750, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null, "11.05.2020", 250, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null,"10.05.2020", 1250, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 750, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 750, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null,"6.05.2020", 750, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null,"5.05.2020", 1000, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity(null,"4.05.2020", 1750, 2500))
                 }}
             }
         }

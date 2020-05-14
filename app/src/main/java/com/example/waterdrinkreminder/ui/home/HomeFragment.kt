@@ -1,7 +1,6 @@
 package com.example.waterdrinkreminder.ui.home
 
 import android.os.Bundle
-import android.transition.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     private lateinit var currentTargetText: TextView
     private lateinit var currentPercentageVolumeText: TextView
     private lateinit var noPrevDataText: TextView
+    private lateinit var viewModel: HistoricalDataViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +35,8 @@ class HomeFragment : Fragment(), HomeContract.View {
 
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
 
+        viewModel = ViewModelProvider(this).get(HistoricalDataViewModel::class.java)
         setupUI(view)
-
-        var viewModel = ViewModelProvider(this).get(HistoricalDataViewModel::class.java)
 
         viewModel.allHistoricalData.observe(viewLifecycleOwner, Observer { data ->
             data?.let{adapter.updateData(ArrayList(data))}
@@ -67,7 +66,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     }
 
     private fun setupUI(view: View) {
-        presenter = HomePresenter(this, context!!)
+        presenter = HomePresenter(this, context!!, viewModel)
         adapter = HistoricalDataAdapter()
         recyclerView = view.findViewById(R.id.historyRecyclerView)
         linearLayoutManager = LinearLayoutManager(context)
