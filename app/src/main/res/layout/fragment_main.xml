@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/drop" />
 
     <TextView
-        android:id="@+id/percentage_volume"
+        android:id="@+id/percentageVolumeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
@@ -34,7 +34,7 @@
         app:layout_constraintVertical_bias="0.75" />
 
     <TextView
-        android:id="@+id/remaining_volume_text"
+        android:id="@+id/remainingVolumeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1250ml"
@@ -57,13 +57,13 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toEndOf="@+id/remaining_volume_text"
-        app:layout_constraintStart_toStartOf="@+id/remaining_volume_text"
-        app:layout_constraintTop_toBottomOf="@+id/remaining_volume_text"
+        app:layout_constraintEnd_toEndOf="@+id/remainingVolumeText"
+        app:layout_constraintStart_toStartOf="@+id/remainingVolumeText"
+        app:layout_constraintTop_toBottomOf="@+id/remainingVolumeText"
         app:layout_constraintVertical_bias="0.19" />
 
     <TextView
-        android:id="@+id/target_volume_text"
+        android:id="@+id/targetVolumeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
@@ -86,19 +86,20 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toEndOf="@+id/target_volume_text"
-        app:layout_constraintStart_toStartOf="@+id/target_volume_text"
-        app:layout_constraintTop_toBottomOf="@+id/remaining_volume_text"
+        app:layout_constraintEnd_toEndOf="@+id/targetVolumeText"
+        app:layout_constraintStart_toStartOf="@+id/targetVolumeText"
+        app:layout_constraintTop_toBottomOf="@+id/remainingVolumeText"
         app:layout_constraintVertical_bias="0.19" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="2dp"
         android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toStartOf="@+id/target_volume_text"
-        app:layout_constraintStart_toEndOf="@+id/remaining_volume_text"
-        app:layout_constraintTop_toBottomOf="@+id/drop_image"
-        android:background="@color/colorPrimaryDark"/>
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@id/linearLayout5"
+        app:layout_constraintEnd_toStartOf="@id/targetVolumeText"
+        app:layout_constraintStart_toEndOf="@id/remainingVolumeText"
+        app:layout_constraintTop_toBottomOf="@id/drop_image" />
 
 
     <LinearLayout
@@ -128,22 +129,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        tools:listitem="@layout/history_item"
+        tools:listitem="@layout/historical_item"
         android:padding="20dp">
     </androidx.recyclerview.widget.RecyclerView>
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45999998"
-        android:src="@drawable/button_add_water_dialog_theme"
-        android:contentDescription="@string/open_add_water_dialog_text" />
 
     <TextView
         android:id="@+id/currentDateText"
@@ -157,5 +145,34 @@
         android:textSize="24sp"
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="sans-serif-medium"/>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45999998"
+        android:src="@drawable/button_add_water_dialog_theme"
+        android:contentDescription="@string/open_add_water_dialog_text"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/noHistoricalDataText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_prev_data_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/historyRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+        android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="sans-serif-black"
+        android:textSize="24sp"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

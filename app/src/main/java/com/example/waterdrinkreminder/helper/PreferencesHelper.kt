@@ -9,8 +9,8 @@ class PreferencesHelper private constructor() {
         private lateinit var sharedPreferences: SharedPreferences
 
         private val CURRENT_DATE_STRING = "current_date"
-        private val CURRENT_PERCENTAGE_VOLUME = "current_percentage_volume"
-        private val CURRENT_VOLUME = "current_volume"
+        private val CURRENT_TARGET_VOLUME = "current_target_volume"
+        private val CURRENT_REMAINNG_VOLUME = "current_remaining_volume"
 
         fun getInstance(context: Context): PreferencesHelper {
             if (!::sharedPreferences.isInitialized) {
@@ -27,11 +27,11 @@ class PreferencesHelper private constructor() {
     val getCurrentDate: String?
         get() = sharedPreferences.getString(CURRENT_DATE_STRING, "")
 
-    val getCurrentPercentageVolume: Int?
-        get() = sharedPreferences.getInt(CURRENT_PERCENTAGE_VOLUME, 0)
+    val getCurrentTargetVolume: Int?
+        get() = sharedPreferences.getInt(CURRENT_TARGET_VOLUME, 0)
 
-    val getCurrentVolume: Int?
-        get() = sharedPreferences.getInt(CURRENT_VOLUME, 0)
+    val getCurrentRemainingVolume: Int?
+        get() = sharedPreferences.getInt(CURRENT_REMAINNG_VOLUME, 0)
 
     fun saveCurrentDate(date: String) {
         sharedPreferences.edit()
@@ -39,15 +39,15 @@ class PreferencesHelper private constructor() {
             .apply()
     }
 
-    fun saveCurrentPercentageVolume(percentageVolume: Int) {
+    fun saveCurrentTargetVolume(target: Int) {
         sharedPreferences.edit()
-            .putInt(CURRENT_PERCENTAGE_VOLUME, percentageVolume)
+            .putInt(CURRENT_TARGET_VOLUME, target)
             .apply()
     }
 
-    fun saveCurrentVolume(volume: Int) {
+    fun saveCurrentRemainingVolume(remaining: Int) {
         sharedPreferences.edit()
-            .putInt(CURRENT_VOLUME, volume)
+            .putInt(CURRENT_REMAINNG_VOLUME, remaining)
             .apply()
     }
 

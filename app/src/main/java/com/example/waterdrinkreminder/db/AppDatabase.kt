@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.waterdrinkreminder.db.HistoricalDataEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -26,13 +25,13 @@ abstract class AppDatabase : RoomDatabase() {
 
                     historicalDataDao?.deleteAll()
 
-                    historicalDataDao?.insert(HistoricalDataEntity(null, "110.05.2020", 10, "250ml/2500ml"))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"10.05.2020", 20, "1250ml/2500ml"))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 12, "750ml/2500ml"))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 5, "750ml/2500ml"))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"6.05.2020", 76, "750ml/2500ml"))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"5.05.2020", 4, "750ml/2500ml"))
-                    historicalDataDao?.insert(HistoricalDataEntity(null,"4.05.2020", 99, "750ml/2500ml"))
+                    historicalDataDao?.insert(HistoricalDataEntity(null, "11.05.2020", 250, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity(null,"10.05.2020", 1250, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 750, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 750, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity(null,"6.05.2020", 750, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity(null,"5.05.2020", 1000, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity(null,"4.05.2020", 1750, 2500))
                 }}
             }
         }

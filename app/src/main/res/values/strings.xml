@@ -2,4 +2,5 @@
     <string name="app_name">WaterDrinkReminder</string>
     <string name="drop_text">Drop</string>
     <string name="open_add_water_dialog_text">OpenAddWaterDialog</string>
+    <string name="no_prev_data_text">You don\'t have any prev data</string>
 </resources>

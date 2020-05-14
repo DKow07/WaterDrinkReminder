@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.waterdrinkreminder.db.HistoricalDataEntity
 
 class HistoricalDataViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: HistoricalDataRepository
