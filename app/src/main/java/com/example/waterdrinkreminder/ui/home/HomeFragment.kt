@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +17,7 @@ import com.example.waterdrinkreminder.R
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataEntity
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
 
-class HomeFragment : Fragment(), HomeContract.View {
+class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener {
 
     private lateinit var presenter: HomePresenter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -26,6 +29,11 @@ class HomeFragment : Fragment(), HomeContract.View {
     private lateinit var currentPercentageVolumeText: TextView
     private lateinit var noPrevDataText: TextView
     private lateinit var viewModel: HistoricalDataViewModel
+    private lateinit var openAddWaterPanelButton: ImageView
+    private lateinit var addWaterPanel: ConstraintLayout
+    private lateinit var grayBackground: View
+
+    private var isOpenAddWaterPanel = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,6 +86,12 @@ class HomeFragment : Fragment(), HomeContract.View {
         currentTargetText = view.findViewById(R.id.targetVolumeText)
         currentPercentageVolumeText = view.findViewById(R.id.percentageVolumeText)
         noPrevDataText = view.findViewById(R.id.noHistoricalDataText)
+
+        openAddWaterPanelButton = view.findViewById(R.id.openAddWaterPanelButton)
+        openAddWaterPanelButton.setOnClickListener(this)
+        addWaterPanel = view.findViewById(R.id.addWaterPanel)
+        grayBackground = view.findViewById(R.id.grayBackground)
+
     }
 
     private fun checkIfEmptyDataList(data: List<HistoricalDataEntity>) {
@@ -87,6 +101,32 @@ class HomeFragment : Fragment(), HomeContract.View {
         } else {
             noPrevDataText.visibility = View.INVISIBLE
             recyclerView.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.openAddWaterPanelButton -> {
+                onClickOpenAddWaterPanelButton()
+            }
+        }
+    }
+
+    private fun onClickOpenAddWaterPanelButton() {
+        if(isOpenAddWaterPanel) {
+            isOpenAddWaterPanel = false
+            openAddWaterPanelButton.setImageResource(R.drawable.button_add_water_dialog_theme)
+            addWaterPanel.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
+            grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
+            addWaterPanel.visibility = View.INVISIBLE
+            grayBackground.visibility = View.INVISIBLE
+        } else {
+            isOpenAddWaterPanel = true
+            openAddWaterPanelButton.setImageResource(R.drawable.close_button_add_water_dialog_theme)
+            addWaterPanel.visibility = View.VISIBLE
+            grayBackground.visibility = View.VISIBLE
+            addWaterPanel.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
+            grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
         }
     }
 }
