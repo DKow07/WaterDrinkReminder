@@ -1,17 +1,18 @@
 package com.example.waterdrinkreminder.ui.home
 
 import com.example.waterdrinkreminder.base.BaseContract
-import com.example.waterdrinkreminder.db.HistoricalDataEntity
 
 interface HomeContract {
 
     interface View : BaseContract.BaseView {
-        fun onLoadHistoricalDataSuccess(items: ArrayList<HistoricalDataEntity>)
+        fun setCurrentDate(date: String)
 
-        fun onLoadHistoricalDataError()
+        fun onFillBasicData(remaining: String, target: String, percentageVolume: String)
     }
 
     interface Presenter : BaseContract.BasePresenter {
-        fun loadHistoricalDataFromDb()
+        fun fillBasicData()
+
+        fun checkCurrentDate()
     }
 }

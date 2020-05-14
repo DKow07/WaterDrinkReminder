@@ -1,12 +1,13 @@
 package com.example.waterdrinkreminder.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
+import PreferencesHelper
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.waterdrinkreminder.ui.home.HomeFragment
 import com.example.waterdrinkreminder.R
-import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
+import com.example.waterdrinkreminder.ui.home.HomeFragment
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +17,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+
+        val currentDate = PreferencesHelper.getInstance(this).getCurrentDate
+
+        //TODO: filling first data, maybe is a better solution??
+        if(currentDate == null || currentDate == "") {
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+            val date = dateFormat.format(Date())
+            PreferencesHelper.getInstance(this).saveCurrentDate(date)
+            PreferencesHelper.getInstance(this).saveCurrentTargetVolume(2500)
+            PreferencesHelper.getInstance(this).saveCurrentRemainingVolume(0)
+        }
 
         switchFragment(homeFragment)
     }
