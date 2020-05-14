@@ -9,10 +9,11 @@ import com.example.waterdrinkreminder.ui.main.MainActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val SPLASH_TIME_OUT:Long=3000
+    private val SPLASH_TIME_OUT:Long=2000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme_NoActionBar)
         setContentView(R.layout.activity_splash_screen)
 
         Handler().postDelayed({

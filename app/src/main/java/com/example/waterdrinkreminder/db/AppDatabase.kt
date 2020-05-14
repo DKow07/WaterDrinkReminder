@@ -25,8 +25,8 @@ abstract class AppDatabase : RoomDatabase() {
 
                     //historicalDataDao?.deleteAll()
 
-//                    historicalDataDao?.insert(HistoricalDataEntity(null, "11.05.2020", 250, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity(null,"10.05.2020", 1250, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity( "13.05.2020", 2750, 2500))
+//                    historicalDataDao?.insert(HistoricalDataEntity("12.05.2020", 2500, 2500))
 //                    historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 750, 2500))
 //                    historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 750, 2500))
 //                    historicalDataDao?.insert(HistoricalDataEntity(null,"6.05.2020", 750, 2500))
