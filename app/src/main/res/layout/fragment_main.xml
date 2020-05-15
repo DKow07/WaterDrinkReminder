@@ -130,7 +130,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        tools:listitem="@layout/historical_item"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/historical_item"
+        app:stackFromEnd="true"
+        app:reverseLayout="true"/>
 
     <TextView
         android:id="@+id/currentDateText"

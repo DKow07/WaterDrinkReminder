@@ -35,7 +35,6 @@ class HomePresenter(private var view: HomeContract.View?, private var context: C
         if(checkIfIsNewDate(date)) {
             saveDataToDB()
             PreferencesHelper.getInstance(context).saveCurrentDate(date)
-            //clear volume and percentageVolume
             clearPreferencesForNewDay()
         }
     }
@@ -53,7 +52,7 @@ class HomePresenter(private var view: HomeContract.View?, private var context: C
         return newLocalDate!!.after(oldLocalDate)
     }
 
-    fun saveDataToDB() {
+    private fun saveDataToDB() {
         val remaining = PreferencesHelper.getInstance(context).getCurrentRemainingVolume
         val target = PreferencesHelper.getInstance(context).getCurrentTargetVolume
         val date = PreferencesHelper.getInstance(context).getCurrentDate
@@ -68,8 +67,8 @@ class HomePresenter(private var view: HomeContract.View?, private var context: C
         }
     }
 
-    fun clearPreferencesForNewDay() {
-
+    private fun clearPreferencesForNewDay() {
+        PreferencesHelper.getInstance(context).saveCurrentRemainingVolume(0)
     }
 
     override fun onDestroy() {
