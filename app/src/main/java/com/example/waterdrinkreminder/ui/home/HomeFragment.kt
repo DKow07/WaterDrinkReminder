@@ -1,13 +1,15 @@
 package com.example.waterdrinkreminder.ui.home
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.waterdrinkreminder.R
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataEntity
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
+import com.example.waterdrinkreminder.db.oneEntryData.EntryDataViewModel
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animation.AnimationListener {
 
@@ -29,20 +33,16 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     private lateinit var currentTargetText: TextView
     private lateinit var currentPercentageVolumeText: TextView
     private lateinit var noPrevDataText: TextView
-    private lateinit var viewModel: HistoricalDataViewModel
+    private lateinit var historicalDataViewModel: HistoricalDataViewModel
+    private lateinit var entryDataViewModel: EntryDataViewModel
     private lateinit var openAddWaterPanelButton: ImageView
     private lateinit var addWaterPanel: ConstraintLayout
     private lateinit var grayBackground: View
-    private lateinit var plusButton: ImageView
-    private lateinit var minusButton: ImageView
     private lateinit var addWaterButton: ImageView
-    private lateinit var waterCupCounterText: TextView
+    private lateinit var spinnerType: Spinner
+    private lateinit var editTextMlVolume: EditText
 
     private var isOpenAddWaterPanel = false
-
-    private var waterCupCounter = 0
-
-    private val VOLUME = 250
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,13 +52,16 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
 
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
 
-        viewModel = ViewModelProvider(this).get(HistoricalDataViewModel::class.java)
+        historicalDataViewModel = ViewModelProvider(this).get(HistoricalDataViewModel::class.java)
+        entryDataViewModel = ViewModelProvider(this).get(EntryDataViewModel::class.java)
         setupUI(view)
 
-        viewModel.allHistoricalData.observe(viewLifecycleOwner, Observer { data ->
+        historicalDataViewModel.allHistoricalData.observe(viewLifecycleOwner, Observer { data ->
             data?.let{adapter.updateData(ArrayList(data))}
             checkIfEmptyDataList(data)
         })
+
+
 
         presenter.checkCurrentDate() //TODO: cyclic, what when app is running and 24??
 
@@ -83,7 +86,7 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     }
 
     private fun setupUI(view: View) {
-        presenter = HomePresenter(this, context!!, viewModel)
+        presenter = HomePresenter(this, context!!, historicalDataViewModel, entryDataViewModel)
         adapter = HistoricalDataAdapter()
         recyclerView = view.findViewById(R.id.historyRecyclerView)
         linearLayoutManager = LinearLayoutManager(context)
@@ -101,13 +104,15 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
         addWaterPanel = view.findViewById(R.id.addWaterPanel)
         grayBackground = view.findViewById(R.id.grayBackground)
 
-        plusButton = view.findViewById(R.id.plusButton)
-        plusButton.setOnClickListener(this)
-        minusButton = view.findViewById(R.id.minusButton)
-        minusButton.setOnClickListener(this)
         addWaterButton = view.findViewById(R.id.addWaterButton)
         addWaterButton.setOnClickListener(this)
-        waterCupCounterText = view.findViewById(R.id.waterCupCounterText)
+
+        spinnerType = view.findViewById(R.id.spinnerType)
+        val types = mutableListOf("Coffee", "Tea", "Water")
+        val spinnerTypeAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, types)
+        spinnerType.adapter = spinnerTypeAdapter
+
+        editTextMlVolume = view.findViewById(R.id.editTextMlVolume)
     }
 
     private fun checkIfEmptyDataList(data: List<HistoricalDataEntity>) {
@@ -123,8 +128,6 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.openAddWaterPanelButton -> onClickOpenAddWaterPanelButton()
-            R.id.minusButton -> onClickMinusButton()
-            R.id.plusButton -> onClickPlusButton()
             R.id.addWaterButton -> onClickAddWaterButton()
         }
     }
@@ -140,7 +143,7 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     private fun closeAddWaterPanel() {
         isOpenAddWaterPanel = false
         openAddWaterPanelButton.setImageResource(R.drawable.button_add_water_dialog_theme)
-        var anim = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+        val anim = AnimationUtils.loadAnimation(context, R.anim.fade_out)
         anim.setAnimationListener(this)
         addWaterPanel.startAnimation(anim)
         grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
@@ -158,24 +161,8 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
         grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
     }
 
-    private fun onClickMinusButton() {
-        if(waterCupCounter == 0)
-            return
-
-        waterCupCounter--
-        waterCupCounterText.text = waterCupCounter.toString()
-    }
-
-    private fun onClickPlusButton() {
-        if(waterCupCounter == 100)
-            return
-
-        waterCupCounter++
-        waterCupCounterText.text = waterCupCounter.toString()
-    }
-
     private fun onClickAddWaterButton() {
-        val volume = VOLUME * waterCupCounter
+        val volume = editTextMlVolume.text.toString().toInt()
         var remaining = PreferencesHelper.getInstance(context!!).getCurrentRemainingVolume
         var target = PreferencesHelper.getInstance(context!!).getCurrentTargetVolume
         remaining = remaining!! + volume
@@ -183,7 +170,13 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
         PreferencesHelper.getInstance(context!!).saveCurrentRemainingVolume(remaining)
 
         presenter.fillBasicData()
+
+        val type = spinnerType.selectedItem.toString()
+
+        presenter.saveEntryDataToDb(type, volume)
+
         closeAddWaterPanel()
+        hideKeyboard()
     }
 
     override fun onAnimationRepeat(animation: Animation?) {
@@ -191,11 +184,22 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     }
 
     override fun onAnimationEnd(animation: Animation?) {
-        waterCupCounter = 0
-        waterCupCounterText.text = waterCupCounter.toString()
     }
 
     override fun onAnimationStart(animation: Animation?) {
         return
+    }
+
+    fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

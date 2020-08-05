@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.waterdrinkreminder.db.historicaldata.AppDatabase
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataEntity
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
+import com.example.waterdrinkreminder.db.oneEntryData.EntryDataEntity
+import com.example.waterdrinkreminder.db.oneEntryData.EntryDataViewModel
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomePresenter(private var view: HomeContract.View?, private var context: Context, private val viewModel: HistoricalDataViewModel) : HomeContract.Presenter {
+class HomePresenter(private var view: HomeContract.View?, private var context: Context, private val historicalDataViewModel: HistoricalDataViewModel, private val entryViewModel: EntryDataViewModel) : HomeContract.Presenter {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
@@ -60,7 +62,7 @@ class HomePresenter(private var view: HomeContract.View?, private var context: C
         if(date != null && remaining != null && target != null) {
             val data = HistoricalDataEntity( date, remaining, target)
             try {
-                viewModel.insert(data)
+                historicalDataViewModel.insert(data)
             } catch(exception: Exception) {
 
             }
@@ -73,5 +75,11 @@ class HomePresenter(private var view: HomeContract.View?, private var context: C
 
     override fun onDestroy() {
         view = null
+    }
+
+    fun saveEntryDataToDb(type:String, volume:Int) {
+        val date = PreferencesHelper.getInstance(context).getCurrentDate
+        val data = EntryDataEntity(null, date!!, type, volume)
+        entryViewModel.insert(data)
     }
 }

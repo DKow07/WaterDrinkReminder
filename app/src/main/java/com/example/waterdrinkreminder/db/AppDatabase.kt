@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.waterdrinkreminder.db.oneEntryData.EntryDataDao
+import com.example.waterdrinkreminder.db.oneEntryData.EntryDataEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [HistoricalDataEntity::class], version = 1, exportSchema = false)
+@Database(entities = [HistoricalDataEntity::class, EntryDataEntity::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun HistoricalDataDao(): HistoricalDataDao
+    abstract fun EntryDataDao(): EntryDataDao
 
     companion object {
         @Volatile
@@ -22,6 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
                 super.onOpen(db)
                 instance.let { database -> scope.launch {
                     val historicalDataDao = database?.HistoricalDataDao()
+                    val entryDataDao = database?.EntryDataDao()
 
                     //historicalDataDao?.deleteAll()
 
