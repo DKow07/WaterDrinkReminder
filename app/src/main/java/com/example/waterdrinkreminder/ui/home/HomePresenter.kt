@@ -15,7 +15,7 @@ import java.util.*
 
 class HomePresenter(private var view: HomeContract.View?, private var context: Context, private val historicalDataViewModel: HistoricalDataViewModel, private val entryViewModel: EntryDataViewModel) : HomeContract.Presenter {
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+    private val dateFormat = SimpleDateFormat("dd.MM.yyyy")
 
     override fun fillBasicData() {
         val remaining = PreferencesHelper.getInstance(context).getCurrentRemainingVolume

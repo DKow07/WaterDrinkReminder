@@ -20,9 +20,11 @@ import com.example.waterdrinkreminder.R
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataEntity
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataViewModel
 import com.example.waterdrinkreminder.db.oneEntryData.EntryDataViewModel
-import kotlinx.android.synthetic.main.fragment_main.*
+import com.example.waterdrinkreminder.ui.daily.DailyFragment
+import com.example.waterdrinkreminder.ui.daily.DailyPresenter
+import com.example.waterdrinkreminder.ui.main.MainActivity
 
-class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animation.AnimationListener {
+class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animation.AnimationListener, HistoricalDataListener {
 
     private lateinit var presenter: HomePresenter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -36,6 +38,7 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     private lateinit var historicalDataViewModel: HistoricalDataViewModel
     private lateinit var entryDataViewModel: EntryDataViewModel
     private lateinit var openAddWaterPanelButton: ImageView
+    private lateinit var currentDayDropImageView: ImageView
     private lateinit var addWaterPanel: ConstraintLayout
     private lateinit var grayBackground: View
     private lateinit var addWaterButton: ImageView
@@ -61,8 +64,6 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
             checkIfEmptyDataList(data)
         })
 
-
-
         presenter.checkCurrentDate() //TODO: cyclic, what when app is running and 24??
 
         presenter.fillBasicData()
@@ -87,7 +88,7 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
 
     private fun setupUI(view: View) {
         presenter = HomePresenter(this, context!!, historicalDataViewModel, entryDataViewModel)
-        adapter = HistoricalDataAdapter()
+        adapter = HistoricalDataAdapter(this)
         recyclerView = view.findViewById(R.id.historyRecyclerView)
         linearLayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = linearLayoutManager
@@ -113,6 +114,11 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
         spinnerType.adapter = spinnerTypeAdapter
 
         editTextMlVolume = view.findViewById(R.id.editTextMlVolume)
+
+        currentDayDropImageView = view.findViewById(R.id.dropImageView)
+        currentDayDropImageView.setOnClickListener{
+            onHistoricalDataClickListener(HistoricalDataEntity(currentDateText.text.toString(), 0, 0))
+        }
     }
 
     private fun checkIfEmptyDataList(data: List<HistoricalDataEntity>) {
@@ -149,7 +155,6 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
         grayBackground.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
         addWaterPanel.visibility = View.INVISIBLE
         grayBackground.visibility = View.INVISIBLE
-
     }
 
     private fun showAddWaterPanel() {
@@ -184,6 +189,7 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     }
 
     override fun onAnimationEnd(animation: Animation?) {
+        return
     }
 
     override fun onAnimationStart(animation: Animation?) {
@@ -201,5 +207,12 @@ class HomeFragment : Fragment(), HomeContract.View, View.OnClickListener, Animat
     fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    override fun onHistoricalDataClickListener(historicalDataEntity: HistoricalDataEntity) {
+//        val toast = Toast.makeText(context, "Date " + historicalDataEntity.date, Toast.LENGTH_SHORT)
+//        toast.show()
+        val dailyFragment = DailyFragment(historicalDataEntity.date)
+        (activity as MainActivity).switchFragment(dailyFragment)
     }
 }

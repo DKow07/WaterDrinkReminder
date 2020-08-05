@@ -27,15 +27,10 @@ abstract class AppDatabase : RoomDatabase() {
                     val historicalDataDao = database?.HistoricalDataDao()
                     val entryDataDao = database?.EntryDataDao()
 
-                    //historicalDataDao?.deleteAll()
+                    historicalDataDao?.deleteAll()
 
-//                    historicalDataDao?.insert(HistoricalDataEntity( "13.05.2020", 2750, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity("12.05.2020", 2500, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity(null,"8.05.2020", 750, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity(null,"7.05.2020", 750, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity(null,"6.05.2020", 750, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity(null,"5.05.2020", 1000, 2500))
-//                    historicalDataDao?.insert(HistoricalDataEntity(null,"4.05.2020", 1750, 2500))
+                    historicalDataDao?.insert(HistoricalDataEntity( "25.10.2020", 2750, 2500))
+                    //historicalDataDao?.insert(HistoricalDataEntity("12.05.2020", 2500, 2500))
                 }}
             }
         }

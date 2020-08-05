@@ -3,12 +3,13 @@ package com.example.waterdrinkreminder.ui.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterdrinkreminder.R
 import com.example.waterdrinkreminder.db.historicaldata.HistoricalDataEntity
 import kotlinx.android.synthetic.main.historical_item.view.*
 
-class HistoricalDataAdapter() : RecyclerView.Adapter<HistoricalDataViewHolder>() {
+class HistoricalDataAdapter(private val historicalDataListener: HistoricalDataListener) : RecyclerView.Adapter<HistoricalDataViewHolder>() {
 
     private val items = mutableListOf<HistoricalDataEntity>()
 
@@ -20,7 +21,7 @@ class HistoricalDataAdapter() : RecyclerView.Adapter<HistoricalDataViewHolder>()
 
     override fun onBindViewHolder(holder: HistoricalDataViewHolder, position: Int) {
         if(itemCount > position) {
-            holder.bindData(items[position])
+            holder.bindData(items[position], historicalDataListener)
         }
     }
 
@@ -36,10 +37,13 @@ class HistoricalDataViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val percentageVolume = view.historyItemPercentageVolume
     val volume = view.historyItemVolume
 
-    fun bindData(data: HistoricalDataEntity) {
+    fun bindData(data: HistoricalDataEntity, historicalDataListener: HistoricalDataListener) {
         date?.text = data.date
         volume?.text = data.remainingVolume.toString() + "ml/" + data.targetVolume.toString() + "ml"
         var percentageVolumeFloat: Int = ((data.remainingVolume.toFloat() / data.targetVolume.toFloat()) * 100).toInt()
         percentageVolume?.text = percentageVolumeFloat.toString() + "%"
+        itemView.setOnClickListener {
+            historicalDataListener.onHistoricalDataClickListener(data)
+        }
     }
 }

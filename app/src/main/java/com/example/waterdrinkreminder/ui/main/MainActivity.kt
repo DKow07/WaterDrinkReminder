@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         //TODO: filling first data, maybe is a better solution??
         if(currentDate == null || currentDate == "") {
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy")
             val date = dateFormat.format(Date())
             PreferencesHelper.getInstance(this).saveCurrentDate(date)
             PreferencesHelper.getInstance(this).saveCurrentTargetVolume(2500)
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         switchFragment(homeFragment)
     }
 
-    private fun switchFragment(fragment: Fragment) {
+    fun switchFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()
